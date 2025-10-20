@@ -9,44 +9,45 @@ questions = {
     'R': "5. Do you recycle and reduce waste? (yes/no)?"
 }
 
-answers = {}
+def do_questionaire():
+    answers = {}
 
-for variable_name, question in questions.items():
-    while True:
-        answer = input(f"\nQuestion: {question}\nYour answer: ")
-        if variable_name == 'R':
-            if answer.lower() in ['yes', 'no']:
-                # Convert yes/no to 1/2 for calculation
-                answers[variable_name] = 1 if answer.lower() == 'yes' else 2
-                break
-            print("Please answer 'yes' or 'no'")
-        else:
-            try:
-                answers[variable_name] = float(answer)
-                break
-            except ValueError:
-                print("Please enter a numeric value")
+    for variable_name, question in questions.items():
+        while True:
+            answer = input(f"\nQuestion: {question}\nYour answer: ")
+            if variable_name == 'R':
+                if answer.lower() in ['yes', 'no']:
+                    # Convert yes/no to 1/2 for calculation
+                    answers[variable_name] = 1 if answer.lower() == 'yes' else 2
+                    break
+                print("Please answer 'yes' or 'no'")
+            else:
+                try:
+                    answers[variable_name] = float(answer)
+                    break
+                except ValueError:
+                    print("Please enter a numeric value")
 
-# Calculate Total Contamination
-# Formula: CF=(Hx7×2.3)+(E×0.5)+(C×10)+(F×250)−(R×100)
-contamination = answers['R'] * (
-    0.271 * answers['H'] * 4 +  # Car mileage contribution
-    0.475 * answers['E'] +      # Electricity usage contribution
-    25 * answers['C'] * 12 +    # Clothes buying contribution
-    250 * answers['F']          # Flights contribution
-)
+    # Calculate Total Contamination
+    # Formula: CF=(Hx7×2.3)+(E×0.5)+(C×10)+(F×250)−(R×100)
+    contamination = answers['R'] * (
+        0.271 * answers['H'] * 4 +  # Car mileage contribution
+        0.475 * answers['E'] +      # Electricity usage contribution
+        25 * answers['C'] * 12 +    # Clothes buying contribution
+        250 * answers['F']          # Flights contribution
+    )
 
-answers['total_contamination'] = contamination
-print(f"\nTotal Contamination: {contamination:.2f} kg CO₂")
+    answers['total_contamination'] = contamination
+    print(f"\nTotal Contamination: {contamination:.2f} kg CO₂")
 
-df = pd.DataFrame([answers])
+    df = pd.DataFrame([answers])
 
-try:
-    existing_df = pd.read_json("answers.json")
-    combined_df = pd.concat([existing_df, df], ignore_index=True)
-    combined_df.to_json("answers.json", orient="records", indent=4)
-except (FileNotFoundError, ValueError):
-    df.to_json("answers.json", orient="records", indent=4)
+    try:
+        existing_df = pd.read_json("answers.json")
+        combined_df = pd.concat([existing_df, df], ignore_index=True)
+        combined_df.to_json("answers.json", orient="records", indent=4)
+    except (FileNotFoundError, ValueError):
+        df.to_json("answers.json", orient="records", indent=4)
 
 def print_json_results():
     try:
@@ -74,3 +75,19 @@ def print_json_results():
     except Exception as e:
         print(f"\nAn error occurred: {str(e)}")
 
+def main():
+    running = True
+    print("Welcome to this stupid ass useless program")
+    while running:
+        command = int(input("Select a command (number):\n1. do questionaire\n2. see previous shit\n3. exit\n> "))
+        if command == 1:
+            do_questionaire()
+        elif command == 2:
+            print_json_results()
+        elif command == 3:
+            running = False
+        else:
+            print("That's not a valid command. Please try the number according to the commands.")
+    print("Thank you for trusting us with this dumb thing idk")
+
+main()
