@@ -2,11 +2,11 @@ import pandas as pd
 import json
 
 questions = {
-    'H': "1. How many hours do you drive each week?",
-    'E': "2. How much electricity do you use per month? (In kWh which can be seen in your bill)",
-    'C': "3. How many pieces of clothing you buy each month? ",
-    'F': "4. How many flights do you take each year?",
-    'R': "5. Do you recycle and reduce waste? (yes/no)?"
+    'H': "1. How many hours do you drive each week on average?",
+    'E': "2. How much electricity does your household use each month? (You can find this in kWh on your electricity bill — e.g., 250 kWh) ",
+    'C': "3. On average, how many new clothing items do you buy each month (shirts, pants, shoes, etc.)?",
+    'F': "4. How many round-trip flights do you take per year?",
+    'R': "5. Do you regularly recycle materials like paper, plastic, and glass? (yes/no)"
 }
 
 def do_questionaire():
@@ -17,7 +17,6 @@ def do_questionaire():
             answer = input(f"\nQuestion: {question}\nYour answer: ")
             if variable_name == 'R':
                 if answer.lower() in ['yes', 'no']:
-                    # Convert yes/no to 1/2 for calculation
                     answers[variable_name] = 1 if answer.lower() == 'yes' else 2
                     break
                 print("Please answer 'yes' or 'no'")
@@ -28,8 +27,7 @@ def do_questionaire():
                 except ValueError:
                     print("Please enter a numeric value")
 
-    # Calculate Total Contamination
-    # Formula: CF=(Hx7×2.3)+(E×0.5)+(C×10)+(F×250)−(R×100)
+    # Calculate total contamination
     contamination = answers['R'] * (
         0.271 * answers['H'] * 4 +  # Car mileage contribution
         0.475 * answers['E'] +      # Electricity usage contribution
@@ -51,9 +49,9 @@ def do_questionaire():
 
 def print_json_results():
     try:
-        # Read and display all entries from the JSON file
         with open("answers.json", "r") as file:
             data = json.load(file)
+
             print("\n=== Survey Results ===")
             for idx, entry in enumerate(data, 1):
                 print(f"\nEntry #{idx}:")
@@ -65,9 +63,48 @@ def print_json_results():
                 print(f"Recycles: {'Yes' if entry['R'] == 1 else 'No'}")
                 print(f"Total Contamination: {entry['total_contamination']:.2f} kg CO₂")
                 print("-" * 40)
-            
-            print(f"\nTotal number of entries: {len(data)}")
-            
+
+            total_entries = len(data)
+            print(f"\nTotal number of entries: {total_entries}")
+
+            if total_entries >= 2:
+                first = data[0]['total_contamination']
+                last = data[-1]['total_contamination']
+                prev = data[-2]['total_contamination']
+
+                # Improvement since first record
+                diff_first = first - last
+                percent_first = (diff_first / first) * 100 if first != 0 else 0
+
+                # Improvement since previous record
+                diff_prev = prev - last
+                percent_prev = (diff_prev / prev) * 100 if prev != 0 else 0
+
+                print("\n=== Progress Summary ===")
+                # First comparison (overall)
+                if diff_first > 0:
+                    print(f"Overall improvement since first record: "
+                          f"-{diff_first:.2f} kg CO₂ ({percent_first:.2f}% reduction)")
+                elif diff_first < 0:
+                    print(f"Overall increase since first record: "
+                          f"+{-diff_first:.2f} kg CO₂ ({-percent_first:.2f}% increase)")
+                else:
+                    print("No change since your first record.")
+
+                # Second comparison (previous session)
+                if diff_prev > 0:
+                    print(f"Improvement since last time: "
+                          f"-{diff_prev:.2f} kg CO₂ ({percent_prev:.2f}% reduction)")
+                elif diff_prev < 0:
+                    print(f"Increase since last time: "
+                          f"+{-diff_prev:.2f} kg CO₂ ({-percent_prev:.2f}% increase)")
+                else:
+                    print("No change since last time.")
+            else:
+                print("\nNot enough data to calculate improvement (need at least two records).")
+
+            print("")
+
     except FileNotFoundError:
         print("\nNo results file found (answers.json)")
     except json.JSONDecodeError:
@@ -77,17 +114,35 @@ def print_json_results():
 
 def main():
     running = True
-    print("Welcome to this stupid ass useless program")
+    print("Welcome to the carbon footprint quiz")
     while running:
-        command = int(input("Select a command (number):\n1. do questionaire\n2. see previous shit\n3. exit\n> "))
+        try:
+            command = int(input(
+                "Select a command (number):\n"
+                "1. Do the questionnaire\n"
+                "2. See previous results\n"
+                "3. About this application\n"
+                "4. Exit\n> "
+            ))
+        except ValueError:
+            print("Invalid input. Please enter a number between 1 and 4.")
+            continue
+
         if command == 1:
             do_questionaire()
         elif command == 2:
             print_json_results()
         elif command == 3:
+            print("")
+            print("This application helps you estimate your carbon footprint.")
+            print("You can take the questionnaire multiple times and see how much you've improved over time.")
+            print("")
+        elif command == 4:
             running = False
         else:
-            print("That's not a valid command. Please try the number according to the commands.")
-    print("Thank you for trusting us with this dumb thing idk")
+            print("That's not a valid command. Please try again.")
 
-main()
+    print("Thank you for using this program.\nClosing program...")
+
+if __name__ == "__main__":
+    main()
