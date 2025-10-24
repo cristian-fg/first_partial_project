@@ -30,7 +30,7 @@ def do_questionaire():
                     # Store as numeric value (1 for yes, 2 for no)
                     answers[variable_name] = 1 if answer.lower() == 'yes' else 2
                     break
-                print("Please answer 'yes' or 'no'")
+                
 
             # For numeric questions, ensure valid numeric input
             else:
@@ -50,7 +50,7 @@ def do_questionaire():
     # - Flight frequency
     # The recycling variable (R) acts as a multiplier.
     contamination = answers['R'] * (
-        0.271 * answers['H'] * 4 +  # Car mileage contribution (assuming 4 weeks/month)
+        0.271 * answers['H'] * 4 +  # Hours driven in car weekly 
         0.475 * answers['E'] +      # Electricity usage contribution
         25 * answers['C'] * 12 +    # Clothing purchases (yearly impact)
         250 * answers['F']          # Flights contribution
@@ -85,7 +85,7 @@ def print_json_results():
             for idx, entry in enumerate(data, 1):
                 print(f"\nEntry #{idx}:")
                 print("-" * 40)
-                print(f"Car mileage (weekly): {entry['H']:.2f}")
+                print(f"Hours driven in car (weekly): {entry['H']:.2f}")
                 print(f"Electricity usage (monthly): {entry['E']:.2f}")
                 print(f"Clothes bought (monthly): {entry['C']:.2f}")
                 print(f"Flights (yearly): {entry['F']:.2f}")
@@ -136,7 +136,7 @@ def print_json_results():
 
             print("")
 
-    # Handle file or data errors gracefully
+    # Handle file or data errors
     except FileNotFoundError:
         print("\nNo results file found (answers.json)")
     except json.JSONDecodeError:
@@ -182,6 +182,6 @@ def main():
 
     print("Thank you for using this program.\nClosing program...")
 
-# start of the program
+# Standard Python entry point — runs main loop if executed directly
 if __name__ == "__main__":
     main()
