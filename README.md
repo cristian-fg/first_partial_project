@@ -1,5 +1,5 @@
-Household Carbon Footprint Tracker
-General Description
+#Household Carbon Footprint Tracker
+#General Description
 
 This project is a simple questionnaire that helps users keep track of the pollution produced by their household.
 You’ll answer a short series of questions about your weekly, monthly, and yearly habits — including driving, electricity use, clothing purchases, flights, and recycling.
