@@ -7,7 +7,7 @@ You’ll answer a short series of questions about your weekly, monthly, and year
 Once you complete the questionnaire, the program calculates your average carbon footprint (in kg of CO₂) and displays your results.
 You can also view previous results and track your progress over time.
 
-Instructions to Run the Code
+# Instructions to Run the Code
 
 Start the program.
 Run the Python file in your terminal or IDE.
@@ -28,7 +28,7 @@ You can compare your latest results with previous sessions.
 
 The program tracks your progress and shows whether your footprint has increased or decreased over time.
 
-Reflection on Impact
+# Reflection on Impact
 
 This program helps users:
 
@@ -41,6 +41,6 @@ Increase awareness about personal contributions to pollution.
 While it doesn’t directly reduce pollution, it encourages individuals to reflect on their habits and make more sustainable choices.
 By understanding their own environmental impact, users can take small but meaningful steps toward a cleaner and healthier planet.
 
-Video Demonstration
+# Video Demonstration
 
 Watch the demo on YouTube
