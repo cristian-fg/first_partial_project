@@ -56,3 +56,7 @@ No license specified.
 ```
 
 Referenced symbols and files: `do_questionaire`, `print_json_results`, `main`, main.py, README.md
+```
+
+# Video Link
+- https://www.youtube.com/watch?v=xE8U7JC8kHI
